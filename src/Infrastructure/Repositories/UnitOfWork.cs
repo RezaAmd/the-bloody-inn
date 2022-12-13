@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-
-namespace TheBloodyInn.Infrastructure.Repositories;
+﻿namespace TheBloodyInn.Infrastructure.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
@@ -14,10 +11,14 @@ public class UnitOfWork : IUnitOfWork
     }
     #endregion
 
-    #region EF Methods
     public async Task SaveAsync(CancellationToken stoppingToken = default)
     {
         await _context.SaveChangesAsync(stoppingToken);
     }
-    #endregion
+
+    public ISqlRepository<TEntity> SqlRepository<TEntity>() where TEntity : class
+    {
+        ISqlRepository<TEntity> repository = new SqlRepository<TEntity, Context>(_context);
+        return repository;
+    }
 }
