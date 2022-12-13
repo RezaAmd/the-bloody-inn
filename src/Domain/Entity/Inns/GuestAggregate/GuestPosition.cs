@@ -17,7 +17,7 @@ public class GuestPosition
 
     #region Relations
     public Guid GuestId { get; set; }
-    public virtual Guest Guest { get; set; }
+    //public virtual Guest Guest { get; set; }
 
     public Guid? RoomId { get; set; }
     public virtual InnRoom? Room { get; set; }

@@ -9,7 +9,7 @@ public class Inn
     /// Create a new Inn.
     /// </summary>
     /// <param name="InkeeperId">Creator is owner of inn.</param>
-    public Inn(Guid InkeeperId, List<InnRoom> rooms = null)
+    public Inn(Guid InkeeperId, List<InnRoom>? rooms = null)
     {
         if (rooms.Count < 3)
             throw new ArgumentOutOfRangeException("At least 4 rooms should be built.");
