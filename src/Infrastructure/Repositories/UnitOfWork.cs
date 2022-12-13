@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace TheBloodyInn.Infrastructure.Repositories;
 
-public class UnitOfWork : IUnitOfWorks
+public class UnitOfWork : IUnitOfWork
 {
     #region constructor
     public Context _context { get; }

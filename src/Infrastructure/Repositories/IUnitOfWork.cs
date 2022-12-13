@@ -1,6 +1,6 @@
 ﻿namespace TheBloodyInn.Infrastructure.Repositories;
 
-public interface IUnitOfWorks
+public interface IUnitOfWork
 {
     Task SaveAsync(CancellationToken stoppingToken = default);
     Context _context { get; }
