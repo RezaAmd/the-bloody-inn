@@ -11,6 +11,11 @@
     <Folder Include="Common\Extensions\" />
     <Folder Include="Common\Models\DTOs\" />
     <Folder Include="Common\Models\ViewModels\" />
+    <Folder Include="Common\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
   </ItemGroup>
 
   <ItemGroup>
