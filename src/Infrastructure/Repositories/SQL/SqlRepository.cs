@@ -39,32 +39,28 @@ public class SqlRepository<TEntity, TContext> : ISqlRepository<TEntity>
 
     public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        // TODO:
-        // Make async task.
         Assert.NotNull(entity, nameof(entity));
         Entities.Update(entity);
+        await Task.CompletedTask;
     }
     public virtual async Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
-        // TODO:
-        // Make async task.
         Assert.NotNull(entities, nameof(entities));
         Entities.UpdateRange(entities);
+        await Task.CompletedTask;
     }
 
     public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        // TODO:
-        // Make async task.
         Assert.NotNull(entity, nameof(entity));
         Entities.Remove(entity);
+        await Task.CompletedTask;
     }
     public virtual async Task DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
-        // TODO:
-        // Make async task.
         Assert.NotNull(entities, nameof(entities));
         Entities.RemoveRange(entities);
+        await Task.CompletedTask;
     }
     #endregion
 }
