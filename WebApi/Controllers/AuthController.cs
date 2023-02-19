@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 
@@ -12,5 +11,4 @@ public class AuthController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> Signin() => Ok();
-
 }
