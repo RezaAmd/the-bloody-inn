@@ -2,7 +2,8 @@
 
 public enum InnkeeperActionType
 {
-    Tamper,
+    None,
+    Bribe,
     Build,
     Kill,
     Bury,
