@@ -1,6 +1,4 @@
-﻿using TheBloodyInn.Domain.Entity.Inns.InnAggregate;
-
-namespace TheBloodyInn.Domain.Entities.Identity;
+﻿namespace TheBloodyInn.Domain.Entities.Identity;
 
 public class User
 {
