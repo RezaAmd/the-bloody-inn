@@ -3,7 +3,7 @@
 namespace TheBloodyInn.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 public class AuthController : ControllerBase
 {
     [HttpPost]
