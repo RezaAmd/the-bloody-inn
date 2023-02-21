@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TheBloodyInn.WebApi.Controllers;
 
@@ -7,6 +8,12 @@ namespace TheBloodyInn.WebApi.Controllers;
 public class InnController : ControllerBase
 {
     #region Ctor
+    private readonly IMediator _mediator;
+
+    public InnController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
     #endregion
 
     [HttpPost]
