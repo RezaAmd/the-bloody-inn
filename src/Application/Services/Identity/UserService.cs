@@ -1,6 +1,6 @@
 ﻿using TheBloodyInn.Infrastructure.Repositories;
 
-namespace Application.Services.Identity;
+namespace TheBloodyInn.Application.Services.Identity;
 
 public class UserService
 {
@@ -11,6 +11,5 @@ public class UserService
         _uow = uow;
     }
     #endregion
-
 
 }

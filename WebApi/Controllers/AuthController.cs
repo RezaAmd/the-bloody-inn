@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Controllers;
+namespace TheBloodyInn.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]

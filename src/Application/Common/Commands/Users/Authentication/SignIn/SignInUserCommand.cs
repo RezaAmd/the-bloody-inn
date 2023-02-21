@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Common.Commands.Identity.Users.Signin;
+namespace TheBloodyInn.Application.Common.Commands.Users.Authentication.SignIn;
 
 public class SignInUserCommand : IRequest<string>
 {

@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Models.ViewModels;
+﻿namespace TheBloodyInn.Application.Common.Models.ViewModels;
 
 public class AccessTokenViewModel
 {
