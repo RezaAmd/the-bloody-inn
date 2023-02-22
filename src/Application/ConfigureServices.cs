@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using TheBloodyInn.Application.Common.Models.DTOs.Settings;
 
 namespace TheBloodyInn.Application;
 
 public static class ConfigureServices
 {
-    public static void AddJwtAuthentication(this IServiceCollection services, JwtSettingsDto settings)
+    public static void AddJwtAuthentication(this IServiceCollection services, JwtSettingsDto? settings)
     {
         if (settings is null)
             return;

@@ -1,5 +1,15 @@
+using TheBloodyInn.Application.Common.Models.DTOs.Settings;
+
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddControllers();
+
+var appSetting = builder.Configuration.GetSection("SiteSettings").Get<AppSettingDto>();
+if (appSetting is null)
+    return;
+
+builder.Services.AddJwtAuthentication(appSetting.JwtSettings);
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
