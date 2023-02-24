@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TheBloodyInn.WebApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]/[action]")]
 public class InnController : ControllerBase
