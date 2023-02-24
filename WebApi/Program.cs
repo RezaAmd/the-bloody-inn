@@ -1,3 +1,5 @@
+using Microsoft.OpenApi.Models;
+using TheBloodyInn.Application.Common.Commands;
 using TheBloodyInn.Application.Common.Models.DTOs.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,12 +13,65 @@ if (appSetting is null)
 builder.Services.AddJwtAuthentication(appSetting.JwtSettings);
 
 // Add MediatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UpdateStramRequest).Assembly));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+#region swagger authorization
+var securityScheme = new OpenApiSecurityScheme()
+{
+    Name = "Authorization",
+    Type = SecuritySchemeType.ApiKey,
+    Scheme = "Bearer",
+    BearerFormat = "JWT",
+    In = ParameterLocation.Header,
+    Description = "JSON Web Token based security",
+};
+var securityReq = new OpenApiSecurityRequirement()
+{
+    {
+        new OpenApiSecurityScheme
+        {
+            Reference = new OpenApiReference
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+            }
+        },
+        new string[] {}
+    }
+};
+var contact = new OpenApiContact()
+{
+    Name = "The Bloody Inn",
+    Email = "support@thebloodyinn.games",
+    Url = new Uri("https://thebloodyinn.games")
+};
+var license = new OpenApiLicense()
+{
+    Name = "Free License",
+    Url = new Uri("https://thebloodyinn.games")
+};
+var info = new OpenApiInfo()
+{
+    Version = "v1",
+    Title = "The Bloody Inn SDK",
+    Description = "Implementing JWT Authentication in SDK",
+    TermsOfService = new Uri("https://thebloodyinn.games/terms"),
+    Contact = contact,
+    License = license
+};
+
+builder.Services.AddSwaggerGen(o =>
+{
+    o.SwaggerDoc("v1", info);
+    o.AddSecurityDefinition("Bearer", securityScheme);
+    o.AddSecurityRequirement(securityReq);
+});
+#endregion
 
 var app = builder.Build();
 
