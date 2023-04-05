@@ -1,4 +1,4 @@
-﻿namespace TheBloodyInn.Domain.Common.ValueObjects;
+﻿namespace TheBloodyInn.Domain.ValueObjects;
 
 public class FrancCash
 {

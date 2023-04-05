@@ -2,9 +2,9 @@
 
 public class AccessTokenViewModel
 {
-    public string AccessToken { get; set; }
-    public string AccessTokenExpiredAt { get; set; }
+    public string? Token { get; set; }
+    public string? TokenExpireAt { get; set; }
 
-    public string RefreshToken { get; set; }
-    public string RefreshTokenExpiredAt { get; set; }
+    public string? RefreshToken { get; set; }
+    public string? RefreshTokenExpireAt { get; set; }
 }

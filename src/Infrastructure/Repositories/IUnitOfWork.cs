@@ -1,7 +1,11 @@
-﻿namespace TheBloodyInn.Infrastructure.Repositories;
+﻿using TheBloodyInn.Infrastructure.Repositories.SQL.Users;
+
+namespace TheBloodyInn.Infrastructure.Repositories;
 
 public interface IUnitOfWork
 {
-    Task SaveAsync(CancellationToken stoppingToken = default);
-    Context _context { get; }
+    AppDbContext _context { get; }
+    Task SaveAsync(CancellationToken stoppingToken);
+
+    IUserRepository UserRepository { get; }
 }

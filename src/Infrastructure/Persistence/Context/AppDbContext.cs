@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Reflection;
+using TheBloodyInn.Domain.Entities.Identity;
 
 namespace TheBloodyInn.Infrastructure.Persistence.Context;
 
-public class Context : DbContext
+public class AppDbContext : DbContext
 {
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -20,10 +20,17 @@ public class Context : DbContext
         optionsBuilder.LogTo(Console.WriteLine);
 
         IConfigurationRoot configuration = new ConfigurationBuilder()
-            //.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            //.AddJsonFile("appsettings.json")
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
             .Build();
 
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("ConnectionString"));
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("Database"), options =>
+        {
+            options.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+        });
     }
+
+    #region DbSets
+    public DbSet<User> Users { get; set; }
+    #endregion
 }

@@ -1,4 +1,5 @@
 ﻿using TheBloodyInn.Domain.Entities.Inns.InnAggregate;
+using TheBloodyInn.Domain.ValueObjects;
 
 namespace TheBloodyInn.Domain.Entities.Inns;
 

@@ -1,24 +1,35 @@
-﻿namespace TheBloodyInn.Infrastructure.Repositories;
+﻿using TheBloodyInn.Infrastructure.Repositories.SQL.Users;
+
+namespace TheBloodyInn.Infrastructure.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
     #region constructor
-    public Context _context { get; }
+    public AppDbContext _context { get; }
 
-    public UnitOfWork(Context context)
+    public UnitOfWork(AppDbContext context)
     {
         _context = context;
     }
     #endregion
 
-    public async Task SaveAsync(CancellationToken stoppingToken = default)
+    #region Identity
+    private IUserRepository? _userRepository;
+    public IUserRepository UserRepository
+    {
+        get
+        {
+            if (_userRepository == null)
+            {
+                _userRepository = new UserRepository(_context);
+            }
+            return _userRepository;
+        }
+    }
+    #endregion
+
+    public async Task SaveAsync(CancellationToken stoppingToken)
     {
         await _context.SaveChangesAsync(stoppingToken);
-    }
-
-    public ISqlRepository<TEntity> SqlRepository<TEntity>() where TEntity : class
-    {
-        ISqlRepository<TEntity> repository = new SqlRepository<TEntity, Context>(_context);
-        return repository;
     }
 }

@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Folder Include="Common\Exceptions\" />
-    <Folder Include="Common\Extensions\" />
     <Folder Include="Common\Queries\" />
   </ItemGroup>
 

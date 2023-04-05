@@ -1,24 +1,25 @@
 using Microsoft.OpenApi.Models;
-using TheBloodyInn.Application.Common.Commands;
+using TheBloodyInn.Application.Common.Commands.Users.Authentication.SignIn;
 using TheBloodyInn.Application.Common.Models.DTOs.Settings;
+using TheBloodyInn.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
+builder.Services.ConfigureWritable<AppSettingDto>(builder.Configuration.GetSection("SiteSettings"));
 var appSetting = builder.Configuration.GetSection("SiteSettings").Get<AppSettingDto>();
 if (appSetting is null)
     return;
 
-builder.Services.AddJwtAuthentication(appSetting.JwtSettings);
+
+ConfigureServices(builder.Services, appSetting);
 
 // Add MediatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UpdateStramRequest).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SignInUserCommand).Assembly));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 #region swagger authorization
 var securityScheme = new OpenApiSecurityScheme()
@@ -95,3 +96,13 @@ app.MapControllers();
 #endregion
 
 app.Run();
+
+void ConfigureServices(IServiceCollection services, AppSettingDto appSetting)
+{
+    // Unit of work and repositories.
+    services.AddInfrastructureServices();
+
+    services.AddApplicationServices();
+    // JWT Bearer.
+    services.AddJwtAuthentication(appSetting.JwtSettings);
+}
