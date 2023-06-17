@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using TheBloodyInn.Application.Common.Security.JwtBearer;
 using TheBloodyInn.Application.Services.AssemblyServices;
 using TheBloodyInn.Application.Services.Identity;
+using TheBloodyInn.Infrastructure;
 
 namespace TheBloodyInn.Application;
 
@@ -14,6 +15,8 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
+        services.AddInfrastructureServices();
+
         services.AddScoped<IIdentityService, IdentityService>();
         return services;
     }

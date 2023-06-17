@@ -8,7 +8,7 @@ using TheBloodyInn.Infrastructure.Persistence.Context;
 
 #nullable disable
 
-namespace TheBloodyInn.Infrastructure.Migrations
+namespace TheBloodyInn.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot

@@ -1,3 +1,5 @@
+using TheBloodyInn.Application;
+
 namespace TheBloodyInn.WebApp
 {
     public class Program
@@ -5,6 +7,9 @@ namespace TheBloodyInn.WebApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Application services.
+            builder.Services.AddApplicationServices();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
