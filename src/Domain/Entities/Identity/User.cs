@@ -22,7 +22,7 @@ public class User
     public string? Name { get; private set; }
     public string Email { get; private set; }
     public bool IsEmailConfirmed { get; private set; }
-    public PasswordHash PasswordHash { get; set; }
+    public PasswordHash? PasswordHash { get; set; }
     public bool IsBanned { get; private set; }
     public DateTime RegisteredAt { get; private set; }
 

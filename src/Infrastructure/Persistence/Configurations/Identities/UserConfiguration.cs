@@ -19,7 +19,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(a => a.Username).HasColumnType(DataTypes.nvarchar50);
         
         // Name
-        builder.Property(a => a.Name).HasColumnType(DataTypes.nvarchar50);
+        builder.Property(a => a.Name).HasColumnType(DataTypes.nvarchar50).IsRequired(false);
 
         // Email
         builder.Property(a => a.Email).HasColumnType(DataTypes.nvarchar50);
@@ -32,8 +32,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.OwnsOne(u => u.PasswordHash, ph =>
         {
             ph.Property(u => u.Value)
-            .HasColumnName("HashedPassword")
-            .HasColumnType(DataTypes.nvarchar500);
+            .HasColumnName("PasswordHashed")
+            .HasColumnType(DataTypes.nvarchar500)
+            .IsRequired(false);
         });
 
         // IsBanned
