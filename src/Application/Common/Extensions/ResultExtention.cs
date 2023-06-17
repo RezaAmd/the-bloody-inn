@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Text.Json;
 
-namespace TechOnIt.Application.Common.Extentions;
+namespace TheBloodyInn.Application.Common.Extensions;
 
 public static class ResultExtention
 {
@@ -86,7 +86,7 @@ public record ManageObjects
     private bool IsObjectString(object o)
     {
         if (o == null) return false;
-        return o.GetType().IsAssignableFrom(typeof(String)) || o.GetType().IsAssignableFrom(typeof(string));
+        return o.GetType().IsAssignableFrom(typeof(string)) || o.GetType().IsAssignableFrom(typeof(string));
     }
 
     private bool IsObjectList(object o)
