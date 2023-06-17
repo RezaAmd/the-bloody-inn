@@ -8,18 +8,38 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.ToTable("Users", TableSchema.Identity);
+
+        // Id
         builder.HasKey(u => u.Id); // primary key
-        builder.Property(u => u.Id).ValueGeneratedNever();
+        builder.Property(u => u.Id).HasColumnType(DataTypes.guid)
+            .ValueGeneratedNever();
+
+        // Username
+        builder.Property(a => a.Username).HasColumnType(DataTypes.nvarchar50);
+        
+        // Name
+        builder.Property(a => a.Name).HasColumnType(DataTypes.nvarchar50);
+
+        // Email
+        builder.Property(a => a.Email).HasColumnType(DataTypes.nvarchar50);
         builder.HasIndex(b => b.Email).IsUnique();
 
-        builder.OwnsOne(u => u.PasswordHash);
-
-        #region column types
+        // IsEmailConfirmed
         builder.Property(a => a.IsEmailConfirmed).HasColumnType(DataTypes.boolean);
+
+        // Password
+        builder.OwnsOne(u => u.PasswordHash, ph =>
+        {
+            ph.Property(u => u.Value)
+            .HasColumnName("HashedPassword")
+            .HasColumnType(DataTypes.nvarchar500);
+        });
+
+        // IsBanned
         builder.Property(a => a.IsBanned).HasColumnType(DataTypes.boolean);
 
-        builder.Property(a => a.Username).HasColumnType(DataTypes.nvarchar50);
-        builder.Property(a => a.Email).HasColumnType(DataTypes.nvarchar50);
-        #endregion
+        // RegisteredAt
+        builder.Property(u => u.RegisteredAt).HasColumnType(DataTypes.datetime2);
     }
 }

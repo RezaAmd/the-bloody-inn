@@ -30,6 +30,10 @@ namespace TheBloodyInn.WebApp
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
             app.Run();
         }
     }
