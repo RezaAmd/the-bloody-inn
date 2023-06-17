@@ -1,20 +1,22 @@
-﻿using TheBloodyInn.Domain.ValueObjects;
-
-namespace TheBloodyInn.Domain.Entities.Identity;
+﻿namespace TheBloodyInn.Domain.Entities.Identity;
 
 public class User
 {
-    #region Constructors
+    #region Ctor
+
     User() { }
+
     public User(string email)
     {
         GenerateNewId();
         SetNewEmail(email);
         UnBan();
     }
+
     #endregion
 
     #region Properties
+
     public Guid Id { get; private set; }
     public string Username { get; private set; }
     public string? Name { get; private set; }
@@ -23,9 +25,11 @@ public class User
     public PasswordHash PasswordHash { get; set; }
     public bool IsBanned { get; private set; }
     public DateTime RegisteredAt { get; private set; }
+
     #endregion
 
     #region Methods
+
     private void GenerateNewId()
     {
         // Id must be null.
@@ -59,6 +63,7 @@ public class User
     {
         IsBanned = false;
     }
+
     #endregion
 
     #region Relations
