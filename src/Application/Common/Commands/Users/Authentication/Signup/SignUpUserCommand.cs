@@ -6,13 +6,13 @@ using TheBloodyInn.Domain.ValueObjects;
 
 namespace TheBloodyInn.Application.Common.Commands.Users.Authentication.Signup;
 
-public class SignUpUserCommand : IRequest<UserSignupStatus>
+public class SignUpUserCommand : IRequest<SignupStatus>
 {
     public string Email { get; set; }
     public string Password { get; set; }
 }
 
-public sealed class SignUpUserCommandHandler : IRequestHandler<SignUpUserCommand, UserSignupStatus>
+public sealed class SignUpUserCommandHandler : IRequestHandler<SignUpUserCommand, SignupStatus>
 {
     private readonly IIdentityService _identityService;
     public SignUpUserCommandHandler(IIdentityService identityService)
@@ -20,7 +20,7 @@ public sealed class SignUpUserCommandHandler : IRequestHandler<SignUpUserCommand
         _identityService = identityService;
     }
 
-    public async Task<UserSignupStatus> Handle(SignUpUserCommand request, CancellationToken cancellationToken = default)
+    public async Task<SignupStatus> Handle(SignUpUserCommand request, CancellationToken cancellationToken = default)
     {
         // Create new user object.
         User newUser = new(request.Email);

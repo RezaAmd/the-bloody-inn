@@ -1,33 +1,44 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
+using System.Text;
 using TheBloodyInn.Domain.Common;
 
 namespace TheBloodyInn.Domain.ValueObjects;
 
 public class PasswordHash : ValueObject
 {
-    public PasswordHash() { }
+    public string? Value { get; private set; }
 
+    #region Ctor & Props
     // Minimum password character length.
-    private static int _minimumLength = 6;
+    private static int _minimumLength = 4;
     // Maximum password character length.
     private static int _maximumLength = 50;
-
-    #region Constructors
+    public PasswordHash() { }
     public PasswordHash(string password)
     {
-        string validatedPassword = _validation(password);
-        Value = _encode(validatedPassword);
+        _setValue(password);
     }
     #endregion
 
-    public string Value { get; private set; }
-
     #region Methods
-    public static PasswordHash Parse(string password)
-        => new PasswordHash(password);
+    private string _encode(string password)
+    {
+        var saltBytes = Encoding.ASCII.GetBytes("6067CF0158F61D1751751D5FD4F7E287");
+        var hashPasswordBytes =
+            KeyDerivation.Pbkdf2(
+                password: password,
+                salt: saltBytes,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 1000,
+                numBytesRequested: 256 / 8);
 
-    private static string _validation(string password)
+        return string.Concat(
+            Convert.ToBase64String(saltBytes),
+            "-TBI-",
+            Convert.ToBase64String(hashPasswordBytes));
+    }
+    private void _setValue(string password)
     {
         // Validation
         if (string.IsNullOrEmpty(password))
@@ -37,10 +48,11 @@ public class PasswordHash : ValueObject
         if (password.Length > _maximumLength)
             throw new ArgumentOutOfRangeException($"Password characters cannot be more than {_maximumLength}.");
 
-        // initializing
-        return password;
+        Value = _encode(password);
     }
 
+    public static PasswordHash Parse(string password)
+        => new PasswordHash(password);
     public override int GetHashCode() => Value.GetHashCode();
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -59,7 +71,6 @@ public class PasswordHash : ValueObject
 
         return left.Equals(right);
     }
-
     public static bool operator !=(PasswordHash left, PasswordHash right)
     {
         if (left is null)
@@ -69,30 +80,27 @@ public class PasswordHash : ValueObject
 
         return left.Value != right.Value;
     }
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (ReferenceEquals(obj, null))
+        {
+            return false;
+        }
+
+        return ((PasswordHash)obj == this);
+    }
     #endregion
 
     #region highe level encryption
-
-    public static string _encode(string userPassword)
-    {
-        var saltBytes = Generate128BitSalt();
-        var hashPasswordBytes =
-            KeyDerivation.Pbkdf2(
-                password: userPassword,
-                salt: saltBytes,
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 1000,
-                numBytesRequested: 256 / 8);
-
-        return string.Concat(
-            Convert.ToBase64String(saltBytes),
-            " ",
-            Convert.ToBase64String(hashPasswordBytes));
-    }
-
     public bool VerifyPasswordHash(string password)
     {
-        var splitHash = Value.Split(" ");
+        var splitHash = Value.Split("-TBI-");
 
         var saltHash = Convert.FromBase64String(splitHash[0]);
         var passwordHashed = Convert.FromBase64String(splitHash[1]);
@@ -106,17 +114,6 @@ public class PasswordHash : ValueObject
             numBytesRequested: 256 / 8);
 
         return passwordHashed.SequenceEqual(newhashPasswordBytes);
-    }
-
-    private static byte[] Generate128BitSalt()
-    {
-        var salt = new byte[128 / 8];
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(salt);
-        }
-
-        return salt;
     }
     #endregion
 }

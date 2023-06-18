@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
 
 namespace TheBloodyInn.WebApp.Controllers;
 

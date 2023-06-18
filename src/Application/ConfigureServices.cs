@@ -21,7 +21,9 @@ public static class ConfigureServices
         services.AddInfrastructureServices();
         services.AddFluentValidationServices();
 
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidateCommandBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidateCommandBehavior<,>))
+            .AddTransient<IJwtService, JwtService>()
+            ;
 
         services.AddScoped<IIdentityService, IdentityService>();
         return services;
@@ -45,8 +47,7 @@ public static class ConfigureServices
     {
         if (settings is null)
             return services;
-        services.AddTransient<IJwtService, JwtService>()
-            .AddAuthentication(options =>
+        services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

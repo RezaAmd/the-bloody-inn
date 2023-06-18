@@ -26,17 +26,26 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
-                    @if (User.Identity == null || User.Identity.IsAuthenticated == false)
-                    {
-                        <ul class="navbar-nav flex-grow-1 justify-content-end">
+                    <ul class="navbar-nav flex-grow-1 justify-content-end">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <form id="signout-frm" action="/User/Signout" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <a href="#" class="nav-link text-dark" onclick="document.getElementById('signout-frm').submit()">Logout</a>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Signup">Register</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Signin">Login</a>
                             </li>
-                        </ul>
-                    }
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>

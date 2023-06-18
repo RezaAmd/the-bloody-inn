@@ -4,6 +4,7 @@ using TheBloodyInn.Application.Common.Models.ViewModels;
 using TheBloodyInn.Application.Common.Security.JwtBearer;
 using TheBloodyInn.Application.Services.AssemblyServices;
 using TheBloodyInn.Domain.Entities.Identity;
+using TheBloodyInn.Domain.ValueObjects;
 using TheBloodyInn.Infrastructure.Persistence.Context;
 using TheBloodyInn.Infrastructure.Repositories;
 
@@ -30,30 +31,54 @@ public class IdentityService : IIdentityService
     #endregion
 
     #region Sign-In
-    public async Task<(AccessTokenViewModel? Token, SigInStatus Status)?> SignInUserAsync(string username, string password,
+    public async Task<(AccessTokenViewModel? Token, SignInStatus Status)?> SignInUserAsync(string username, string password,
         CancellationToken cancellationToken = default)
     {
         AccessTokenViewModel? accessToken = new();
 
         var user = await _unitOfWork.UserRepository.FindByIdentityWithRolesAsync(username, cancellationToken);
         if (user is null)
-            return (accessToken, SigInStatus.NotFound);
+            return (accessToken, SignInStatus.NotFound);
 
         var status = user.GetUserSignInStatusResultWithMessage(password);
 
         if (!status.Status.IsSucceeded())
-            return (accessToken, SigInStatus.WrongInformations);
+            return (accessToken, SignInStatus.WrongInformations);
 
         accessToken = await GetUserAccessToken(user, cancellationToken);
         if (accessToken is null)
             status.message = "user is not authenticated";
 
-        return (accessToken, SigInStatus.Succeeded);
+        return (accessToken, SignInStatus.Succeeded);
+    }
+
+    public async Task<(User? user, SignInStatus status)> SignInValidateAsync(string username, string password,
+        CancellationToken cancellationToken)
+    {
+
+        var user = await _context.Users
+            .Where(u => (u.Username == username || u.Email == username))
+            .FirstOrDefaultAsync(cancellationToken);
+
+        // Is user account exist?
+        if (user is null)
+            return (user, SignInStatus.NotFound);
+
+        // Password validation.
+        if (user.PasswordHash == null || user.PasswordHash.VerifyPasswordHash(password) == false)
+            return (user, SignInStatus.WrongPassowrd);
+
+        // Account is ban.
+        if (user.IsBanned)
+            return (user, SignInStatus.Banned);
+
+        return (user, SignInStatus.Succeeded);
+
     }
     #endregion
 
     #region Sign-Up
-    public async Task<UserSignupStatus> SignUpAsync(User newUser,
+    public async Task<SignupStatus> SignUpAsync(User newUser,
         CancellationToken cancellationToken)
     {
         // Check user is exist?
@@ -62,14 +87,14 @@ public class IdentityService : IIdentityService
             .FirstOrDefaultAsync(cancellationToken);
 
         if (user is not null)
-            return UserSignupStatus.AlreadyExist;
+            return SignupStatus.AlreadyExist;
 
         // Create new account.
         await _context.Users.AddAsync(newUser);
         if (await SaveChangeAsync(cancellationToken))
-            return UserSignupStatus.Succeded;
+            return SignupStatus.Succeded;
 
-        return UserSignupStatus.Failed;
+        return SignupStatus.Failed;
     }
     #endregion
 

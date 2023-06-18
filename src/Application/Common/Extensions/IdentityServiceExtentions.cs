@@ -13,10 +13,10 @@ public static class IdentityServiceExtentions
     const string SucceededValidations = "Welcome !";
     #endregion
 
-    public static (SigInStatus Status, string message) GetUserSignInStatusResultWithMessage(this User user, string password = "")
+    public static (SignInStatus Status, string message) GetUserSignInStatusResultWithMessage(this User user, string password = "")
     {
         if (user == null)
-            return (SigInStatus.NotFound, NotFound);
+            return (SignInStatus.NotFound, NotFound);
         //else if (user.IsBaned is true)
         //    return (SigInStatus.WrongInformations, WrongInformations);
         //else if (user.LockOutDateTime != null)
@@ -24,12 +24,12 @@ public static class IdentityServiceExtentions
         else if (!string.IsNullOrWhiteSpace(password))
         {
             if (!user.PasswordHash.VerifyPasswordHash(password))
-                return (SigInStatus.WrongPassowrd, WrongPassowrd);
+                return (SignInStatus.WrongPassowrd, WrongPassowrd);
         }
 
-        return (SigInStatus.Succeeded, SucceededValidations);
+        return (SignInStatus.Succeeded, SucceededValidations);
     }
 
-    public static bool IsSucceeded(this SigInStatus status)
-    => status == SigInStatus.Succeeded ? true : false;
+    public static bool IsSucceeded(this SignInStatus status)
+    => status == SignInStatus.Succeeded ? true : false;
 }

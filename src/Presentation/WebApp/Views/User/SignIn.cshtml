@@ -1,0 +1,30 @@
+﻿@model TheBloodyInn.WebApp.Models.User.SignInDto
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row">
+    <div class="col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+        <div class="d-flex">
+            <img class="mx-auto" src="~/assets/images/Zombies-bro.png" width="300" height="300" />
+        </div>
+        <h3 class="fw-bold text-center">Welcome back!</h3>
+        <form action="/User/SignIn" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div>
+                @Html.AntiForgeryToken()
+            </div>
+            <div class="mb-3">
+                <label asp-for="Username">Username</label>
+                <input asp-for="Username" class="form-control" type="text" maxlength="50" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password">Password</label>
+                <input asp-for="Password" class="form-control" type="password" maxlength="50" />
+            </div>
+            <div class="d-grid mt-5">
+                <button id="signin-btn" class="btn btn-primary" type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+</div>

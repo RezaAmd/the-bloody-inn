@@ -6,9 +6,12 @@ namespace TheBloodyInn.Application.Services.Identity;
 
 public interface IIdentityService
 {
-    Task<(AccessTokenViewModel? Token, SigInStatus Status)?> SignInUserAsync(string username, string password,
+    Task<(AccessTokenViewModel? Token, SignInStatus Status)?> SignInUserAsync(string username, string password,
         CancellationToken cancellationToken = default);
 
-    Task<UserSignupStatus> SignUpAsync(User newUser,
+    Task<(User? user, SignInStatus status)> SignInValidateAsync(string username, string password,
+        CancellationToken cancellationToken);
+
+    Task<SignupStatus> SignUpAsync(User newUser,
         CancellationToken cancellationToken);
 }
