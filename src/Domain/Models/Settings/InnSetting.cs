@@ -4,7 +4,6 @@ namespace TheBloodyInn.Domain.Models.Settings;
 
 public class InnSetting
 {
-    public byte MaxPlayerCount { get; set; }
     public bool IsShortMode { get; set; }
     public List<Guid>? RemovedGuests { get; set; }
     

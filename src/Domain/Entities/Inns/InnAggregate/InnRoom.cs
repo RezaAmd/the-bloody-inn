@@ -19,7 +19,7 @@ public class InnRoom
     public Guid InnId { get; set; }
     public virtual Inn Inn { get; set; }
 
-    public Guid OwnerId { get; set; }
+    public Guid? OwnerId { get; set; }
     public virtual Innkeeper Owner { get; set; }
     #endregion
 

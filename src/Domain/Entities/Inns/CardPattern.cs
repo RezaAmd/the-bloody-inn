@@ -9,12 +9,10 @@ public class CardPattern
 
     #endregion
 
-    #region Props
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     public GuestCategory Category { get; set; }
     public RankType Rank { get; set; }
     public BuildItemType? BuildItem { get; set; }
-    #endregion
 
     #region Relations
 

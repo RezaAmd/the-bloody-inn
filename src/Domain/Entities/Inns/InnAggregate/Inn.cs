@@ -2,7 +2,7 @@
 
 public class Inn
 {
-    #region Constructors
+    #region Ctor
     Inn() { }
 
     /// <summary>
@@ -14,20 +14,18 @@ public class Inn
         if (rooms.Count < 3)
             throw new ArgumentOutOfRangeException("At least 4 rooms should be built.");
 
-        GenerateNewId();
         SetCreator(InkeeperId);
         SetState(InnState.Pending);
-
-        CreatedAt = DateTime.Now;
 
         // Create rooms list.
         Rooms = new List<InnRoom>();
     }
     #endregion
 
-    public Guid Id { get; private set; }
+    public Guid Id { get; private set; } = Guid.NewGuid();
+    public byte MaxPlayerCount { get; set; }
     public InnState State { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.Now;
     public string? Setting { get; private set; } // Object model: InnSetting
 
     #region Relations
@@ -38,13 +36,6 @@ public class Inn
     #endregion
 
     #region Methods
-    /// <summary>
-    /// Generate a new id.
-    /// </summary>
-    void GenerateNewId()
-    {
-        Id = Guid.NewGuid();
-    }
 
     /// <summary>
     /// Set a creator by innkeeper id.
