@@ -1,8 +1,10 @@
-﻿using TheBloodyInn.Application.Common.Enums.IdentityService;
+﻿using Microsoft.EntityFrameworkCore;
+using TheBloodyInn.Application.Common.Enums.IdentityService;
 using TheBloodyInn.Application.Common.Models.ViewModels;
 using TheBloodyInn.Application.Common.Security.JwtBearer;
 using TheBloodyInn.Application.Services.AssemblyServices;
 using TheBloodyInn.Domain.Entities.Identity;
+using TheBloodyInn.Infrastructure.Persistence.Context;
 using TheBloodyInn.Infrastructure.Repositories;
 
 namespace TheBloodyInn.Application.Services.Identity;
@@ -10,14 +12,17 @@ namespace TheBloodyInn.Application.Services.Identity;
 public class IdentityService : IIdentityService
 {
     #region DI & Ctor
+    private readonly AppDbContext _context;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IJwtService _jwtService;
     private readonly IAppSettingsService<AppSettingDto> _appSetting;
 
-    public IdentityService(IUnitOfWork unitOfWork,
+    public IdentityService(AppDbContext context,
+        IUnitOfWork unitOfWork,
         IJwtService jwtService,
         IAppSettingsService<AppSettingDto> appSetting)
     {
+        _context = context;
         _unitOfWork = unitOfWork;
         _jwtService = jwtService;
         _appSetting = appSetting;
@@ -48,6 +53,24 @@ public class IdentityService : IIdentityService
     #endregion
 
     #region Sign-Up
+    public async Task<UserSignupStatus> SignUpAsync(User newUser,
+        CancellationToken cancellationToken)
+    {
+        // Check user is exist?
+        User? user = await _context.Users
+            .Where(u => u.Username == newUser.Username)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (user is not null)
+            return UserSignupStatus.AlreadyExist;
+
+        // Create new account.
+        await _context.Users.AddAsync(newUser);
+        if (await SaveChangeAsync(cancellationToken))
+            return UserSignupStatus.Succeded;
+
+        return UserSignupStatus.Failed;
+    }
     #endregion
 
     #region Privates
@@ -89,5 +112,8 @@ public class IdentityService : IIdentityService
         }
         return accessToken;
     }
+
+    private async Task<bool> SaveChangeAsync(CancellationToken cancellationToken) =>
+        Convert.ToBoolean(await _context.SaveChangesAsync(cancellationToken));
     #endregion
 }

@@ -1,12 +1,21 @@
-﻿namespace TheBloodyInn.WebApp.Controllers;
+﻿using TheBloodyInn.Application.Common.Commands.Users.Authentication.Signup;
+using TheBloodyInn.Application.Common.Enums.IdentityService;
+
+namespace TheBloodyInn.WebApp.Controllers;
 
 public class UserController : Controller
 {
+    #region Properties
+
+    private readonly IMediator _mediator;
+
+    #endregion
+
     #region Ctor
 
-    public UserController()
+    public UserController(IMediator mediator)
     {
-
+        _mediator = mediator;
     }
 
     #endregion
@@ -14,9 +23,24 @@ public class UserController : Controller
     #region Methods
 
     [HttpGet]
-    public IActionResult Authentication()
+    public IActionResult SignUp() => View();
+
+    [HttpPost]
+    public async Task<IActionResult> Signup([FromForm] SignUpUserCommand command, CancellationToken stoppingToken)
     {
-        return View();
+        var signupUserCommandResult = await _mediator.Send(command, stoppingToken);
+
+        // Already Exist
+        if (signupUserCommandResult == UserSignupStatus.AlreadyExist)
+            ModelState.AddModelError("AlreadyExist", "This username already exist!");
+        // Failed
+        if (signupUserCommandResult == UserSignupStatus.Succeded)
+            ModelState.AddModelError("Failed", "Failed on signup. please try again later.");
+
+        if (signupUserCommandResult == UserSignupStatus.Succeded)
+            ViewData["IsSucceded"] = true;
+
+        return View(command);
     }
 
     #endregion

@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using TheBloodyInn.Application.Common.Behaviors;
+using TheBloodyInn.Application.Common.Models;
 using TheBloodyInn.Application.Common.Security.JwtBearer;
 using TheBloodyInn.Application.Services.AssemblyServices;
 using TheBloodyInn.Application.Services.Identity;
@@ -16,6 +19,9 @@ public static class ConfigureServices
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddInfrastructureServices();
+        services.AddFluentValidationServices();
+
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidateCommandBehavior<,>));
 
         services.AddScoped<IIdentityService, IdentityService>();
         return services;
@@ -70,6 +76,22 @@ public static class ConfigureServices
                 option.SaveToken = true;
                 option.TokenValidationParameters = validationParameters;
             });
+        return services;
+    }
+
+    private static IServiceCollection AddFluentValidationServices(this IServiceCollection services)
+    {
+        // Automatic Validation.
+        // https://github.com/FluentValidation/FluentValidation.AspNetCore#automatic-validation
+        services.AddFluentValidationAutoValidation();
+
+        //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+        services.AddFluentValidation(fv =>  // Fluent Validation
+        {
+            fv.RegisterValidatorsFromAssemblyContaining<BaseFluentValidator<object>>();
+        });
+
         return services;
     }
 }

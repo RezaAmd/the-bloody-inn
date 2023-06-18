@@ -11,6 +11,7 @@ public class User
         GenerateNewId();
         SetNewEmail(email);
         UnBan();
+        RegisteredAt = DateTime.Now;
     }
 
     #endregion
@@ -32,9 +33,6 @@ public class User
 
     private void GenerateNewId()
     {
-        // Id must be null.
-        if (!string.IsNullOrEmpty(Id.ToString()))
-            throw new ArgumentException("Id already exist.");
         Id = Guid.NewGuid();
     }
 

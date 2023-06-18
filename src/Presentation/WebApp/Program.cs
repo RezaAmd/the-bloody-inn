@@ -1,45 +1,58 @@
 using TheBloodyInn.Application;
+using TheBloodyInn.Infrastructure;
+using TheBloodyInn.Application.Common.Models.DTOs.Settings;
+using TheBloodyInn.Application.Common.Commands.Users.Authentication.SignIn;
 
-namespace TheBloodyInn.WebApp
+var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.ConfigureWritable<AppSettingDto>(builder.Configuration.GetSection("SiteSettings"));
+var appSetting = builder.Configuration.GetSection("SiteSettings").Get<AppSettingDto>();
+if (appSetting is null)
+    return;
+
+ConfigureServices(builder.Services, appSetting);
+
+// Add MediatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SignInUserCommand).Assembly));
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
 
-            // Application services.
-            builder.Services.AddApplicationServices();
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
+app.UseRouting();
 
-            var app = builder.Build();
+app.UseAuthorization();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-            app.UseRouting();
+app.Run();
 
-            app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+void ConfigureServices(IServiceCollection services, AppSettingDto appSetting)
+{
+    // Unit of work and repositories.
+    services.AddInfrastructureServices();
 
-            app.MapControllerRoute(
-                name: "areas",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-            app.Run();
-        }
-    }
+    services.AddApplicationServices();
+    // JWT Bearer.
+    services.AddJwtAuthentication(appSetting.JwtSettings);
 }
