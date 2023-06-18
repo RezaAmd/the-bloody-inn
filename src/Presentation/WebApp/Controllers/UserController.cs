@@ -38,10 +38,15 @@ public class UserController : Controller
             ModelState.AddModelError("Failed", "Failed on signup. please try again later.");
 
         if (signupUserCommandResult == UserSignupStatus.Succeded)
-            ViewData["IsSucceded"] = true;
+            return RedirectToAction("SuccessfulRegistration");
 
         return View(command);
     }
 
+    [HttpGet]
+    public IActionResult SuccessfulRegistration()
+    {
+        return View();
+    }
     #endregion
 }

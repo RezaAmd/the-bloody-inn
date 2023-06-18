@@ -1,4 +1,6 @@
-﻿namespace TheBloodyInn.Domain.Entities.Identity;
+﻿using System.Xml.Linq;
+
+namespace TheBloodyInn.Domain.Entities.Identity;
 
 public class User
 {
@@ -36,6 +38,37 @@ public class User
         Id = Guid.NewGuid();
     }
 
+    /// <summary>
+    /// Set username for user account.
+    /// </summary>
+    /// <param name="username">Unique username.</param>
+    public void SetUsername(string username)
+    {
+        username = username.Trim().Replace("  ", " ");
+
+        if (username != null && username.Length > 50)
+            throw new ArgumentOutOfRangeException("'Username' cannot be more than 50 characters!");
+        if (username == null || username.Length < 3)
+            throw new ArgumentOutOfRangeException("'Username' cannot be less than 3 characters!");
+
+        Username = username;
+    }
+
+    /// <summary>
+    /// Set display name for user.
+    /// </summary>
+    /// <param name="name">User display name.</param>
+    public void SetName(string name)
+    {
+        name = name.Trim().Replace("  ", " ");
+
+        if (name != null && name.Length > 50)
+            throw new ArgumentOutOfRangeException("'Name' cannot be more than 50 characters!");
+        if (name != null && name.Length < 3)
+            throw new ArgumentOutOfRangeException("'Name' cannot be less than 3 characters!");
+
+        Name = name;
+    }
     public void SetNewEmail(string email, bool isEmailConfirmed = false)
     {
         // Check null value.

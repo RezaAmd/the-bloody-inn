@@ -58,7 +58,7 @@ public class IdentityService : IIdentityService
     {
         // Check user is exist?
         User? user = await _context.Users
-            .Where(u => u.Username == newUser.Username)
+            .Where(u => u.Username == newUser.Username || u.Email == newUser.Email)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (user is not null)
