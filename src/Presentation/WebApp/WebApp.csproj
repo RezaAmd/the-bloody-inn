@@ -22,8 +22,4 @@
     <ProjectReference Include="..\Framework\Framework.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Account\Views\" />
-  </ItemGroup>
-
 </Project>

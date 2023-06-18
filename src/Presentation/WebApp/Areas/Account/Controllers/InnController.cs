@@ -1,5 +1,6 @@
 ﻿namespace TheBloodyInn.WebApp.Areas.Account.Controllers;
 
+[Area("Account")]
 public class InnController : Controller
 {
     #region Properties
