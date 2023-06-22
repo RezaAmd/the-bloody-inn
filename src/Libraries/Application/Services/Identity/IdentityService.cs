@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TheBloodyInn.Application.Common.Enums.IdentityService;
+using TheBloodyInn.Application.Common.Enums.User;
 using TheBloodyInn.Application.Common.Models.ViewModels;
 using TheBloodyInn.Application.Common.Security.JwtBearer;
 using TheBloodyInn.Application.Services.AssemblyServices;

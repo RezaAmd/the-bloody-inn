@@ -1,4 +1,4 @@
-﻿using TheBloodyInn.Application.Common.Enums.IdentityService;
+﻿using TheBloodyInn.Application.Common.Enums.User;
 using TheBloodyInn.Domain.Entities.Identity;
 
 namespace TheBloodyInn.Application.Common.Extensions;

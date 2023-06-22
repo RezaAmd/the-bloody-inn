@@ -1,4 +1,4 @@
-﻿namespace TheBloodyInn.Application.Common.Enums.IdentityService;
+﻿namespace TheBloodyInn.Application.Common.Enums.User;
 
 public class SignupStatus : Enumeration
 {
