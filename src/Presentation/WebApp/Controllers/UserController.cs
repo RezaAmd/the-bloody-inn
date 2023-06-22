@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using TheBloodyInn.Application.Common.Commands.Users.Authentication.SignIn;
 using TheBloodyInn.Application.Common.Commands.Users.Authentication.Signup;
-using TheBloodyInn.Application.Common.Enums.IdentityService;
+using TheBloodyInn.Application.Common.Enums.User;
 using TheBloodyInn.Domain.Entities.Identity;
 using TheBloodyInn.WebApp.Models.User;
 
