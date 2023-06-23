@@ -1,6 +1,6 @@
 ﻿namespace TheBloodyInn.Domain.Entities.Inns.InnAggregate;
 
-public class Inn
+public class Inn : BaseEntity
 {
     #region Ctor
     Inn() { }
@@ -22,7 +22,6 @@ public class Inn
     }
     #endregion
 
-    public Guid Id { get; private set; } = Guid.NewGuid();
     public byte MaxPlayerCount { get; set; }
     public InnState State { get; private set; }
     public DateTime CreatedAt { get; private set; } = DateTime.Now;

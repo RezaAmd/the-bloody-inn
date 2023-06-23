@@ -9,6 +9,7 @@ using TheBloodyInn.Application.Common.Behaviors;
 using TheBloodyInn.Application.Common.Models;
 using TheBloodyInn.Application.Common.Security.JwtBearer;
 using TheBloodyInn.Application.Services.AssemblyServices;
+using TheBloodyInn.Application.Services.Cards;
 using TheBloodyInn.Application.Services.Identity;
 using TheBloodyInn.Infrastructure;
 
@@ -25,7 +26,9 @@ public static class ConfigureServices
             .AddTransient<IJwtService, JwtService>()
             ;
 
-        services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IIdentityService, IdentityService>()
+            .AddScoped<ICardService, CardService>()
+            ;
         return services;
     }
 

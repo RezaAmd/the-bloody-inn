@@ -1,16 +1,15 @@
 ﻿using TheBloodyInn.Domain.Entities.Inns.InnAggregate;
 using TheBloodyInn.Domain.Enum.Guests;
 
-namespace TheBloodyInn.Domain.Entities.Inns;
+namespace TheBloodyInn.Domain.Entities.Guests;
 
-public class GuestPosition
+public class GuestPositionRecord : BaseEntity
 {
     #region Ctors
 
     #endregion
 
     #region Props
-    public Guid Id { get; set; }
     public GuestPosittionType Type { get; set; }
     public DateTime CreatedAt { get; set; }
     #endregion

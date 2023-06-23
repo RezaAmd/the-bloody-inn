@@ -24,5 +24,10 @@ public class InnController : Controller
         return View();
     }
 
+    [HttpGet]
+    public IActionResult Board()
+    {
+        return View();
+    }
     #endregion
 }

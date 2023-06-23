@@ -1,18 +1,16 @@
 ﻿namespace TheBloodyInn.Domain.Entities.Inns.InnAggregate;
 
-public class InnRoom
+public class InnRoom : BaseEntity
 {
     #region Constructors
     InnRoom() { }
 
     public InnRoom(InnRoomNumber roomNumber)
     {
-        GenerateNewId();
         SetRoomNumber(roomNumber);
     }
     #endregion
 
-    public Guid Id { get; private set; }
     public InnRoomNumber Number { get; private set; }
 
     #region Relations
@@ -24,13 +22,6 @@ public class InnRoom
     #endregion
 
     #region Methods
-    /// <summary>
-    /// Generate new id.
-    /// </summary>
-    private void GenerateNewId()
-    {
-        Id = Guid.NewGuid();
-    }
 
     /// <summary>
     /// Set a new room number.

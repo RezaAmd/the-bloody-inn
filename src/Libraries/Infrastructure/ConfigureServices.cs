@@ -10,6 +10,9 @@ public static class ConfigureServices
     {
         services.AddScoped<AppDbContext>();
 
+        //repositories	
+        services.AddScoped(typeof(IRepository<>), typeof(EntityRepository<>));
+
         services.AddScoped<IUnitOfWork, UnitOfWork>()
             .AddScoped<IUserRepository, UserRepository>()
             ;

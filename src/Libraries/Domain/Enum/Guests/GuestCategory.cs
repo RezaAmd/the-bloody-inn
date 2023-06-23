@@ -2,16 +2,16 @@
 
 public enum GuestCategory
 {
-    // تاجران 💵
-    Traders,
     // صنعت گران 🔨
-    Industrialists,
-    // پلیس 🔫
-    Police,
+    Artisans,
+    // تاجران 💵
+    Merchants,
     // مذهبی ✝️
     Religious,
     // اشراف زادگان 🎩
-    Aristocracy,
+    Nobles,
+    // پلیس 🔫
+    Polices,
 
     #region Expantion
     //Famous,

@@ -1,5 +1,6 @@
 ﻿namespace TheBloodyInn.WebApp.Areas.Admin.Controllers;
 
+[Area("Admin")]
 public class InnController : Controller
 {
     #region Props

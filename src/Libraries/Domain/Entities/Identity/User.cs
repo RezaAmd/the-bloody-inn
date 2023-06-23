@@ -1,8 +1,6 @@
-﻿using System.Xml.Linq;
+﻿namespace TheBloodyInn.Domain.Entities.Identity;
 
-namespace TheBloodyInn.Domain.Entities.Identity;
-
-public class User
+public class User : BaseEntity
 {
     #region Ctor
 
@@ -10,7 +8,6 @@ public class User
 
     public User(string email)
     {
-        GenerateNewId();
         SetNewEmail(email);
         UnBan();
         RegisteredAt = DateTime.Now;
@@ -19,8 +16,6 @@ public class User
     #endregion
 
     #region Properties
-
-    public Guid Id { get; private set; }
     public string Username { get; private set; }
     public string? Name { get; private set; }
     public string Email { get; private set; }
@@ -32,11 +27,6 @@ public class User
     #endregion
 
     #region Methods
-
-    private void GenerateNewId()
-    {
-        Id = Guid.NewGuid();
-    }
 
     /// <summary>
     /// Set username for user account.
