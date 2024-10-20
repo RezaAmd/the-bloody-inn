@@ -31,6 +31,6 @@ public class AppDbContext : DbContext
     }
 
     #region DbSets
-    public DbSet<User> Users { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
     #endregion
 }

@@ -23,7 +23,7 @@ public sealed class SignUpUserCommandHandler : IRequestHandler<SignUpUserCommand
     public async Task<SignupStatus> Handle(SignUpUserCommand request, CancellationToken cancellationToken = default)
     {
         // Create new user object.
-        User newUser = new(request.Email);
+        UserEntity newUser = new(request.Email);
         newUser.SetNewEmail(request.Email);
         newUser.PasswordHash = PasswordHash.Parse(request.Password);
 

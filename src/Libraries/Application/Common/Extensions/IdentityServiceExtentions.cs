@@ -13,7 +13,7 @@ public static class IdentityServiceExtentions
     const string SucceededValidations = "Welcome !";
     #endregion
 
-    public static (SignInStatus Status, string message) GetUserSignInStatusResultWithMessage(this User user, string password = "")
+    public static (SignInStatus Status, string message) GetUserSignInStatusResultWithMessage(this UserEntity user, string password = "")
     {
         if (user == null)
             return (SignInStatus.NotFound, NotFound);

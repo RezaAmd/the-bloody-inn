@@ -52,7 +52,7 @@ public class IdentityService : IIdentityService
         return (accessToken, SignInStatus.Succeeded);
     }
 
-    public async Task<(User? user, SignInStatus status)> SignInValidateAsync(string username, string password,
+    public async Task<(UserEntity? user, SignInStatus status)> SignInValidateAsync(string username, string password,
         CancellationToken cancellationToken)
     {
 
@@ -78,11 +78,11 @@ public class IdentityService : IIdentityService
     #endregion
 
     #region Sign-Up
-    public async Task<SignupStatus> SignUpAsync(User newUser,
+    public async Task<SignupStatus> SignUpAsync(UserEntity newUser,
         CancellationToken cancellationToken)
     {
         // Check user is exist?
-        User? user = await _context.Users
+        UserEntity? user = await _context.Users
             .Where(u => u.Username == newUser.Username || u.Email == newUser.Email)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -99,7 +99,7 @@ public class IdentityService : IIdentityService
     #endregion
 
     #region Privates
-    private async Task<AccessTokenViewModel?> GetUserAccessToken(User user, CancellationToken cancellationToken)
+    private async Task<AccessTokenViewModel?> GetUserAccessToken(UserEntity user, CancellationToken cancellationToken)
     {
         AccessTokenViewModel accessToken = new();
         try

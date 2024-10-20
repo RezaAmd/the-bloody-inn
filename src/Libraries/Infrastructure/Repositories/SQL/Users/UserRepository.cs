@@ -13,7 +13,7 @@ internal sealed class UserRepository : IUserRepository
     }
     #endregion
 
-    public async Task<User?> FindByIdentityWithRolesAsync(string identity, CancellationToken stoppingToken = default)
+    public async Task<UserEntity?> FindByIdentityWithRolesAsync(string identity, CancellationToken stoppingToken = default)
         => await _context.Users
     .Where(u => u.Email == identity.Trim().ToLower() || u.Username == identity.Trim().ToLower())
     //.Include(u => u.UserRoles)

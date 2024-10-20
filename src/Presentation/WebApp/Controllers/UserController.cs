@@ -49,7 +49,7 @@ public class UserController : Controller
         {
             #region Signin Cookie
 
-            User user = signinValidateCommandResult.user;
+            UserEntity user = signinValidateCommandResult.user;
 
             var claims = new List<Claim>
             {

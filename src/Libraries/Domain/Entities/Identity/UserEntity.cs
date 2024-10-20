@@ -1,12 +1,12 @@
 ﻿namespace TheBloodyInn.Domain.Entities.Identity;
 
-public class User : BaseEntity
+public class UserEntity : BaseEntity
 {
     #region Ctor
 
-    User() { }
+    UserEntity() { }
 
-    public User(string email)
+    public UserEntity(string email)
     {
         SetNewEmail(email);
         UnBan();

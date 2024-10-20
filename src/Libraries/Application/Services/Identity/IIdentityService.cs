@@ -9,9 +9,9 @@ public interface IIdentityService
     Task<(AccessTokenViewModel? Token, SignInStatus Status)?> SignInUserAsync(string username, string password,
         CancellationToken cancellationToken = default);
 
-    Task<(User? user, SignInStatus status)> SignInValidateAsync(string username, string password,
+    Task<(UserEntity? user, SignInStatus status)> SignInValidateAsync(string username, string password,
         CancellationToken cancellationToken);
 
-    Task<SignupStatus> SignUpAsync(User newUser,
+    Task<SignupStatus> SignUpAsync(UserEntity newUser,
         CancellationToken cancellationToken);
 }

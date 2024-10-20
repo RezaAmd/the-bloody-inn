@@ -4,9 +4,9 @@ using TheBloodyInn.Infrastructure.Common.Consts;
 
 namespace TheBloodyInn.Infrastructure.Persistence.Configurations.Identities;
 
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
         builder.ToTable("Users", TableSchema.Identity);
 

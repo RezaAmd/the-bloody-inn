@@ -3,13 +3,13 @@ using TheBloodyInn.Domain.Enum.Guests;
 
 namespace TheBloodyInn.Domain.Entities.Guests;
 
-public class GuestCard : BaseEntity
+public class GuestEntity : BaseEntity
 {
     #region Ctor's
 
-    GuestCard() { }
+    GuestEntity() { }
 
-    public GuestCard(string systemName, GuestCategory category, RankType rank = RankType.Zero,
+    public GuestEntity(string systemName, GuestCategory category, RankType rank = RankType.Zero,
         AmountOfMoneyInPocket moneyInPocket = AmountOfMoneyInPocket.Eight, BuildItemType buildItem = BuildItemType.None)
     {
         SystemName = systemName;

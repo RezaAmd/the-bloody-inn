@@ -16,7 +16,7 @@ public class Innkeeper : BaseEntity
 
     #region Relations
     public Guid PlayerId { get; set; }
-    public virtual User Player { get; set; }
+    public virtual UserEntity Player { get; set; }
 
     public Guid InnId { get; set; }
     public virtual Inn Inn { get; set; }

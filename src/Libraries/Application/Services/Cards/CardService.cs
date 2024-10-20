@@ -5,9 +5,9 @@ namespace TheBloodyInn.Application.Services.Cards;
 
 public class CardService : ICardService
 {
-    public List<GuestCard> GetAllGuestPatterns()
+    public List<GuestEntity> GetAllGuestPatterns()
     {
-        List<GuestCard> guestList = new();
+        List<GuestEntity> guestList = new();
 
         #region Artisans
 

@@ -5,13 +5,13 @@ using TheBloodyInn.Domain.Entities.Identity;
 
 namespace TheBloodyInn.Application.Common.Commands.Users.Authentication.SignIn;
 
-public class SignInUserValidateCommand : IRequest<(User? user, SignInStatus status)>
+public class SignInUserValidateCommand : IRequest<(UserEntity? user, SignInStatus status)>
 {
     public string? Username { get; set; }
     public string? Password { get; set; }
 }
 
-public sealed class SignInUserValidateCommandHandler : IRequestHandler<SignInUserValidateCommand, (User? user, SignInStatus status)>
+public sealed class SignInUserValidateCommandHandler : IRequestHandler<SignInUserValidateCommand, (UserEntity? user, SignInStatus status)>
 {
     #region DI & Ctor
     private readonly IIdentityService _identityService;
@@ -22,7 +22,7 @@ public sealed class SignInUserValidateCommandHandler : IRequestHandler<SignInUse
     }
     #endregion
 
-    public async Task<(User? user, SignInStatus status)> Handle(SignInUserValidateCommand request, CancellationToken cancellationToken = default)
+    public async Task<(UserEntity? user, SignInStatus status)> Handle(SignInUserValidateCommand request, CancellationToken cancellationToken = default)
     => await _identityService.SignInValidateAsync(request.Username, request.Password, cancellationToken);
 }
 
