@@ -2,7 +2,6 @@
 using TheBloodyInn.Application.Common.Interfaces;
 using TheBloodyInn.Application.Common.Models.ViewModels;
 using TheBloodyInn.Application.Common.Security.JwtBearer;
-using TheBloodyInn.Application.Services.AssemblyServices;
 using TheBloodyInn.Domain.Entities.Identities;
 
 namespace TheBloodyInn.Application.Services.Identity;
@@ -13,14 +12,11 @@ public class IdentityService : IIdentityService
 
     private readonly IAppDbContext _context;
     private readonly IJwtService _jwtService;
-    private readonly IAppSettingsService<AppSettingDto> _appSetting;
     public IdentityService(IAppDbContext context,
-        IJwtService jwtService,
-        IAppSettingsService<AppSettingDto> appSetting)
+        IJwtService jwtService)
     {
         _context = context;
         _jwtService = jwtService;
-        _appSetting = appSetting;
     }
 
     #endregion
@@ -114,7 +110,7 @@ public class IdentityService : IIdentityService
             DateTime tokenExpiresAt = DateTime.Now.AddMinutes(5);
 #if DEBUG
             // In debug mode token life is longer.
-            tokenExpiresAt = tokenExpiresAt.AddMinutes(15);
+            tokenExpiresAt = tokenExpiresAt.AddHours(15);
 #endif
             // Generate token with expiration date & time.
             accessToken.Token = await _jwtService.GenerateTokenAsync(claims: getUserClaimsWithRoles,

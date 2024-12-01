@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using TheBloodyInn.Application;
 using TheBloodyInn.Application.Common.Commands.Users.Authentication.SignIn;
-using TheBloodyInn.Application.Common.Models.DTOs.Settings;
 using TheBloodyInn.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,11 +18,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         builder.Configuration.Bind("CookieSettings", options);
     });
 builder.Services.AddAuthorization();
-
-builder.Services.ConfigureWritable<AppSettingDto>(builder.Configuration.GetSection("SiteSettings"));
-//var appSetting = builder.Configuration.GetSection("SiteSettings").Get<AppSettingDto>();
-//if (appSetting is null)
-//    return;
 
 // Unit of work and repositories.
 builder.Services.AddInfrastructureServices(builder.Configuration);

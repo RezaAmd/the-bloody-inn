@@ -1,15 +1,11 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using TheBloodyInn.Application.Common.Behaviors;
-using TheBloodyInn.Application.Common.Models;
 using TheBloodyInn.Application.Common.Security.JwtBearer;
 using TheBloodyInn.Application.Inns;
-using TheBloodyInn.Application.Services.AssemblyServices;
 using TheBloodyInn.Application.Services.Cards;
 using TheBloodyInn.Application.Services.Identity;
 
@@ -17,8 +13,10 @@ namespace TheBloodyInn.Application;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<AppSettingDto>(configuration.GetSection("SiteSettings"));
+
         services.AddFluentValidationServices();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidateCommandBehavior<,>))
@@ -34,24 +32,12 @@ public static class ConfigureServices
         return services;
     }
 
-    public static void ConfigureWritable<T>(
-        this IServiceCollection services,
-        IConfigurationSection section,
-        string file = "appsettings.json") where T : class, new()
+    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddTransient<IAppSettingsService<T>>(provider =>
-        {
-            var configuration = (IConfigurationRoot)provider.GetService<IConfiguration>();
-            var environment = provider.GetService<IWebHostEnvironment>();
-            var options = provider.GetService<IOptionsMonitor<T>>();
-            return new AppSettingsService<T>(environment, options, configuration, section.Key, file);
-        });
-    }
-
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, JwtSettingsDto? settings)
-    {
-        if (settings is null)
+        var appSetting = configuration.GetSection("SiteSettings").Get<AppSettingDto>();
+        if (appSetting is null || appSetting.JwtSettings == null)
             return services;
+
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,7 +45,7 @@ public static class ConfigureServices
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(option =>
             {
-                var secretKey = Encoding.UTF8.GetBytes(settings.SecretKey);
+                var secretKey = Encoding.UTF8.GetBytes(appSetting.JwtSettings.SecretKey);
                 var validationParameters = new TokenValidationParameters
                 {
                     ClockSkew = TimeSpan.Zero,
@@ -72,10 +58,10 @@ public static class ConfigureServices
                     ValidateLifetime = true,
 
                     ValidateAudience = false,
-                    ValidAudience = settings.Audience,
+                    ValidAudience = appSetting.JwtSettings.Audience,
 
                     ValidateIssuer = true,
-                    ValidIssuer = settings.Issuer,
+                    ValidIssuer = appSetting.JwtSettings.Issuer,
                 };
 
                 option.RequireHttpsMetadata = false;

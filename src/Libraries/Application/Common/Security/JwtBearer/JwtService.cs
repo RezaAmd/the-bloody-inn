@@ -1,21 +1,19 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using TheBloodyInn.Application.Common.Enums.JwtServices;
-using TheBloodyInn.Application.Common.Models.DTOs.Settings;
-using TheBloodyInn.Application.Services.AssemblyServices;
 
 namespace TheBloodyInn.Application.Common.Security.JwtBearer;
 
 public class JwtService : IJwtService
 {
     #region constructure
-    private readonly IAppSettingsService<AppSettingDto> _appSetting;
+    private readonly AppSettingDto _appSetting;
 
-    public JwtService(IAppSettingsService<AppSettingDto> appSetting)
+    public JwtService(IOptions<AppSettingDto> appSetting)
     {
-        _appSetting = appSetting;
+        _appSetting = appSetting.Value;
     }
     #endregion
 
@@ -49,13 +47,13 @@ public class JwtService : IJwtService
     #region Private Methods
     private string Generate(IEnumerable<Claim> claims, DateTime? expiresAt = null)
     {
-        var secretKey = Encoding.UTF8.GetBytes(_appSetting.Value.JwtSettings.SecretKey); // it must be atleast 16 characters or more
+        var secretKey = Encoding.UTF8.GetBytes(_appSetting.JwtSettings.SecretKey); // it must be atleast 16 characters or more
         var signinCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature);
 
         var descriptor = new SecurityTokenDescriptor
         {
-            Issuer = _appSetting.Value.JwtSettings.Issuer,
-            Audience = _appSetting.Value.JwtSettings.Audience,
+            Issuer = _appSetting.JwtSettings.Issuer,
+            Audience = _appSetting.JwtSettings.Audience,
             IssuedAt = DateTime.Now.ToUniversalTime(),
             NotBefore = DateTime.Now.ToUniversalTime(),
             SigningCredentials = signinCredentials,
@@ -67,10 +65,10 @@ public class JwtService : IJwtService
         {
             descriptor.Expires = expiresAt.Value.ToUniversalTime();
         }
-        else if (_appSetting.Value.JwtSettings.ExpirationMinutes.HasValue &&
-            _appSetting.Value.JwtSettings.ExpirationMinutes.Value > 0)
+        else if (_appSetting.JwtSettings.ExpirationMinutes.HasValue &&
+            _appSetting.JwtSettings.ExpirationMinutes.Value > 0)
         {
-            descriptor.Expires = DateTime.Now.AddMinutes(_appSetting.Value.JwtSettings.ExpirationMinutes.Value).ToUniversalTime();
+            descriptor.Expires = DateTime.Now.AddMinutes(_appSetting.JwtSettings.ExpirationMinutes.Value).ToUniversalTime();
         }
         #endregion
 
@@ -85,7 +83,7 @@ public class JwtService : IJwtService
         try
         {
             var handler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_appSetting.Value.JwtSettings.SecretKey);
+            var key = Encoding.UTF8.GetBytes(_appSetting.JwtSettings.SecretKey);
             //var encryptionkey = Encoding.UTF8.GetBytes(appSettings.EncryptionKey);
             var claimsPrincipal = handler.ValidateToken(
                 token,

@@ -1,6 +1,5 @@
 using Microsoft.OpenApi.Models;
 using TheBloodyInn.Application.Common.Commands.Users.Authentication.SignIn;
-using TheBloodyInn.Application.Common.Models.DTOs.Settings;
 using TheBloodyInn.Infrastructure;
 using TheBloodyInn.WebApi.Hubs;
 
@@ -8,16 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.ConfigureWritable<AppSettingDto>(builder.Configuration.GetSection("SiteSettings"));
-var appSetting = builder.Configuration.GetSection("SiteSettings").Get<AppSettingDto>();
-if (appSetting is null)
-    return;
-
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 // JWT Bearer.
-builder.Services.AddJwtAuthentication(appSetting.JwtSettings);
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SignInUserCommand).Assembly));
