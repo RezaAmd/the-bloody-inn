@@ -21,11 +21,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 
 builder.Services.ConfigureWritable<AppSettingDto>(builder.Configuration.GetSection("SiteSettings"));
-var appSetting = builder.Configuration.GetSection("SiteSettings").Get<AppSettingDto>();
-if (appSetting is null)
-    return;
+//var appSetting = builder.Configuration.GetSection("SiteSettings").Get<AppSettingDto>();
+//if (appSetting is null)
+//    return;
 
-ConfigureServices(builder.Services, appSetting);
+// Unit of work and repositories.
+builder.Services.AddInfrastructureServices(builder.Configuration);
+
+builder.Services.AddApplicationServices();
 
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SignInUserCommand).Assembly));
@@ -77,12 +80,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 await app.RunAsync();
-
-
-void ConfigureServices(IServiceCollection services, AppSettingDto appSetting)
-{
-    // Unit of work and repositories.
-    services.AddInfrastructureServices();
-
-    services.AddApplicationServices();
-}

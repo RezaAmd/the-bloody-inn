@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TheBloodyInn.Application.Common.Commands.Users.Authentication.SignIn;
-using TheBloodyInn.Domain.ValueObjects;
+using TheBloodyInn.Application.Common.Commands.Users.Authentication.Signup;
+using TheBloodyInn.Application.Common.Enums.User;
 
 namespace TheBloodyInn.WebApi.Controllers;
 
@@ -19,10 +20,20 @@ public class AuthController : ControllerBase
     #endregion
 
     [HttpPost]
-    public async Task<IActionResult> Signup() => Ok(PasswordHash.Parse("123456"));
+    public async Task<IActionResult> SignUp([FromBody] SignUpUserCommand signUpInputModel,
+        CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(signUpInputModel, cancellationToken);
+        if (result != SignupStatus.Succeded)
+        {
+            return BadRequest(result);
+        }
+        return Ok(result);
+    }
 
     [HttpPost]
-    public async Task<IActionResult> Signin([FromBody] SignInUserCommand userLoginInformation, CancellationToken cancellationToken)
+    public async Task<IActionResult> SignIn([FromBody] SignInUserCommand userLoginInformation,
+        CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(userLoginInformation, cancellationToken);
         return Ok(result);

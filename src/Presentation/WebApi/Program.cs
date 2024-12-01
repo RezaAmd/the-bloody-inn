@@ -7,13 +7,17 @@ using TheBloodyInn.WebApi.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
 builder.Services.ConfigureWritable<AppSettingDto>(builder.Configuration.GetSection("SiteSettings"));
 var appSetting = builder.Configuration.GetSection("SiteSettings").Get<AppSettingDto>();
 if (appSetting is null)
     return;
 
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
-ConfigureServices(builder.Services, appSetting);
+builder.Services.AddApplicationServices();
+// JWT Bearer.
+builder.Services.AddJwtAuthentication(appSetting.JwtSettings);
 
 // Add MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SignInUserCommand).Assembly));
@@ -103,14 +107,4 @@ app.MapControllerRoute(
 app.MapControllers();
 #endregion
 
-app.Run();
-
-void ConfigureServices(IServiceCollection services, AppSettingDto appSetting)
-{
-    // Unit of work and repositories.
-    services.AddInfrastructureServices();
-
-    services.AddApplicationServices();
-    // JWT Bearer.
-    services.AddJwtAuthentication(appSetting.JwtSettings);
-}
+await app.RunAsync();

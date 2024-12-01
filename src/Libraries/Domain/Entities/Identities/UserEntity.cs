@@ -58,7 +58,7 @@ public class UserEntity : BaseEntity
     /// <param name="name">User display name.</param>
     public void SetNickname(string nickName)
     {
-        if (Nickname == null) throw new ArgumentNullException("Nickname cannot be null.");
+        if (nickName == null) throw new ArgumentNullException("Nickname cannot be null.");
 
         Nickname = nickName;
     }

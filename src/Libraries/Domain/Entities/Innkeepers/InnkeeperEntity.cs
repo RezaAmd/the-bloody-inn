@@ -13,8 +13,8 @@ public class InnkeeperEntity : BaseEntity
 
     #region Relations
 
-    public Guid InnId { get; set; }
-    public virtual InnEntity? Inn { get; set; }
+    public virtual ICollection<InnRoomEntity> Rooms { get; set; }
+
     #endregion
 
     #region Ctor

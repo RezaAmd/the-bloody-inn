@@ -5,7 +5,7 @@ namespace TheBloodyInn.Domain.Entities.Inns;
 public class InnEntity : BaseEntity
 {
     public byte MaxPlayerCount { get; set; }
-    public InnState StateId { get; private set; }
+    public InnState StateId { get; private set; } = InnState.Preparing;
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
     public string? Setting { get; private set; } // Object model: InnSetting
 
