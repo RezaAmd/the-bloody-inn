@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TheBloodyInn.Application.Players
+﻿namespace TheBloodyInn.Application.Players
 {
     public class HumanPlayer : IPlayerAction
     {
@@ -12,36 +6,36 @@ namespace TheBloodyInn.Application.Players
 
         public HumanPlayer()
         {
-            
+
         }
 
         #endregion
 
-        public Task BribeGuestAsync(Guid guestId)
+        public Task BribeGuestAsync(Guid guestId, CancellationToken cancellationToken = default)
         {
             // TODO: Call SignalR or game logic
             throw new NotImplementedException();
         }
 
-        public Task BuildAnnexAsync(Guid annexId)
+        public Task BuildAnnexAsync(Guid annexId, CancellationToken cancellationToken = default)
         {
             // TODO: Call SignalR or game logic
             throw new NotImplementedException();
         }
 
-        public Task BuryBodyAsync(Guid guestId)
+        public Task BuryBodyAsync(Guid guestId, CancellationToken cancellationToken = default)
         {
             // TODO: Call SignalR or game logic
             throw new NotImplementedException();
         }
 
-        public Task KillGuestAsync(Guid guestId)
+        public Task KillGuestAsync(Guid guestId, CancellationToken cancellationToken = default)
         {
             // TODO: Call SignalR or game logic
             throw new NotImplementedException();
         }
 
-        public Task PassTurnAsync()
+        public Task PassTurnAsync(CancellationToken cancellationToken = default)
         {
             // TODO: Call SignalR or game logic
             throw new NotImplementedException();
