@@ -8,10 +8,10 @@ using Microsoft.IdentityModel.Tokens;
 using TheBloodyInn.Application.Common.Behaviors;
 using TheBloodyInn.Application.Common.Models;
 using TheBloodyInn.Application.Common.Security.JwtBearer;
+using TheBloodyInn.Application.Inns;
 using TheBloodyInn.Application.Services.AssemblyServices;
 using TheBloodyInn.Application.Services.Cards;
 using TheBloodyInn.Application.Services.Identity;
-using TheBloodyInn.Infrastructure;
 
 namespace TheBloodyInn.Application;
 
@@ -19,7 +19,6 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddInfrastructureServices();
         services.AddFluentValidationServices();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidateCommandBehavior<,>))
@@ -29,6 +28,9 @@ public static class ConfigureServices
         services.AddScoped<IIdentityService, IdentityService>()
             .AddScoped<ICardService, CardService>()
             ;
+
+        services.AddScoped<InnService>();
+
         return services;
     }
 
