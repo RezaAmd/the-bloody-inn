@@ -2,6 +2,7 @@ using Microsoft.OpenApi.Models;
 using TheBloodyInn.Application.Common.Commands.Users.Authentication.SignIn;
 using TheBloodyInn.Application.Common.Models.DTOs.Settings;
 using TheBloodyInn.Infrastructure;
+using TheBloodyInn.WebApi.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,8 @@ builder.Services.AddSwaggerGen(o =>
 });
 #endregion
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -85,6 +88,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapHub<GameHub>("/hub");
+
 #region Endpoint
 app.MapControllerRoute(
     name: "default",
@@ -94,6 +99,8 @@ app.MapControllerRoute(
     pattern: "{area:exists}/{controller=General}/{action=Index}/{id?}");
 app.MapControllers();
 #endregion
+
+app.Urls.Add("http://127.0.0.1:5038");
 
 app.Run();
 
