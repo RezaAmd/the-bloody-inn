@@ -103,8 +103,6 @@ app.MapControllerRoute(
 app.MapControllers();
 #endregion
 
-app.Urls.Add("http://127.0.0.1:5038");
-
 app.Run();
 
 void ConfigureServices(IServiceCollection services, AppSettingDto appSetting)
