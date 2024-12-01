@@ -1,4 +1,6 @@
-﻿namespace TheBloodyInn.Domain.Entities.Players
+﻿using TheBloodyInn.Domain.Entities.Identities;
+
+namespace TheBloodyInn.Domain.Entities.Players
 {
     public class PlayerEntity : BaseEntity
     {
@@ -8,7 +10,7 @@
         #region Relations
         
         public virtual UserEntity? User { get; set; }
-        public virtual BotEntity? Bot { get; set; }
+        public virtual BotPlayerEntity? Bot { get; set; }
 
         #endregion
     }

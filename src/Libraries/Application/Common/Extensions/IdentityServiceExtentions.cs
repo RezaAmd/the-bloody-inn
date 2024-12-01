@@ -1,5 +1,5 @@
 ﻿using TheBloodyInn.Application.Common.Enums.User;
-using TheBloodyInn.Domain.Entities.Identity;
+using TheBloodyInn.Domain.Entities.Identities;
 
 namespace TheBloodyInn.Application.Common.Extensions;
 

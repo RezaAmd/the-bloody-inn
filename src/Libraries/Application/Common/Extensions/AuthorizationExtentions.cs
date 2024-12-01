@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
-using TheBloodyInn.Domain.Entities.Identity;
+using TheBloodyInn.Domain.Entities.Identities;
 
 namespace TheBloodyInn.Application.Common.Extensions;
 
 public static class AuthorizationExtentions
 {
-    public static async Task<IEnumerable<Claim>> GetClaims(this UserEntity user)
+    public static async Task<IEnumerable<Claim>> GetClaimsAsync(this UserEntity user)
     {
         IList<Claim> claims = new List<Claim>
         {
@@ -13,10 +13,10 @@ public static class AuthorizationExtentions
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
         };
 
-        if (user.Name is not null)
+        if (user.Nickname is not null)
         {
-            if (!string.IsNullOrEmpty(user.Name))
-                claims.Add(new Claim(ClaimTypes.GivenName, user.Name));
+            if (!string.IsNullOrEmpty(user.Nickname))
+                claims.Add(new Claim(ClaimTypes.GivenName, user.Nickname));
         }
 
         // TODO:
@@ -32,7 +32,7 @@ public static class AuthorizationExtentions
         return await Task.FromResult(claims);
     }
 
-    public static async Task<IEnumerable<Claim>> GetIdAsClaim(this UserEntity user)
+    public static async Task<IEnumerable<Claim>> GetIdAsClaimAsync(this UserEntity user)
     {
         IList<Claim> claims = new List<Claim>
         {

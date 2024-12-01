@@ -1,15 +1,15 @@
 ﻿using TheBloodyInn.Application.Common.Enums.User;
-using TheBloodyInn.Application.Common.Models;
 using TheBloodyInn.Application.Services.Identity;
-using TheBloodyInn.Domain.Entities.Identity;
+using TheBloodyInn.Domain.Entities.Identities;
 using TheBloodyInn.Domain.ValueObjects;
 
 namespace TheBloodyInn.Application.Common.Commands.Users.Authentication.Signup;
 
 public class SignUpUserCommand : IRequest<SignupStatus>
 {
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public string? Nickname { get; set; }
 }
 
 public sealed class SignUpUserCommandHandler : IRequestHandler<SignUpUserCommand, SignupStatus>
@@ -23,9 +23,16 @@ public sealed class SignUpUserCommandHandler : IRequestHandler<SignUpUserCommand
     public async Task<SignupStatus> Handle(SignUpUserCommand request, CancellationToken cancellationToken = default)
     {
         // Create new user object.
-        UserEntity newUser = new(request.Email);
-        newUser.SetNewEmail(request.Email);
-        newUser.PasswordHash = PasswordHash.Parse(request.Password);
+        UserEntity newUser = new(request.Username);
+
+        // Set password for user.
+        newUser.SetPassword(PasswordHash.Parse(request.Password));
+
+        // Set nickname.
+        if (string.IsNullOrEmpty(request.Nickname) == false)
+        {
+            newUser.SetNickname(request.Nickname);
+        }
 
         return await _identityService.SignUpAsync(newUser, cancellationToken);
     }
@@ -35,9 +42,9 @@ public sealed class SignUpUserCommandValidator : BaseFluentValidator<SignUpUserC
 {
     public SignUpUserCommandValidator()
     {
-        RuleFor(u => u.Email)
+        RuleFor(u => u.Username)
             .NotEmpty()
-            .MinimumLength(7)
+            .MinimumLength(3)
             .MaximumLength(50)
             ;
 

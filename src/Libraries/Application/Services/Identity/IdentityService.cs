@@ -1,42 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TheBloodyInn.Application.Common.Enums.User;
+﻿using TheBloodyInn.Application.Common.Enums.User;
+using TheBloodyInn.Application.Common.Interfaces;
 using TheBloodyInn.Application.Common.Models.ViewModels;
 using TheBloodyInn.Application.Common.Security.JwtBearer;
 using TheBloodyInn.Application.Services.AssemblyServices;
-using TheBloodyInn.Domain.Entities.Identity;
-using TheBloodyInn.Domain.ValueObjects;
-using TheBloodyInn.Infrastructure.Persistence.Context;
-using TheBloodyInn.Infrastructure.Repositories;
+using TheBloodyInn.Domain.Entities.Identities;
 
 namespace TheBloodyInn.Application.Services.Identity;
 
 public class IdentityService : IIdentityService
 {
     #region DI & Ctor
-    private readonly AppDbContext _context;
-    private readonly IUnitOfWork _unitOfWork;
+
+    private readonly IAppDbContext _context;
     private readonly IJwtService _jwtService;
     private readonly IAppSettingsService<AppSettingDto> _appSetting;
-
-    public IdentityService(AppDbContext context,
-        IUnitOfWork unitOfWork,
+    public IdentityService(IAppDbContext context,
         IJwtService jwtService,
         IAppSettingsService<AppSettingDto> appSetting)
     {
         _context = context;
-        _unitOfWork = unitOfWork;
         _jwtService = jwtService;
         _appSetting = appSetting;
     }
+
     #endregion
 
     #region Sign-In
+
     public async Task<(AccessTokenViewModel? Token, SignInStatus Status)?> SignInUserAsync(string username, string password,
         CancellationToken cancellationToken = default)
     {
         AccessTokenViewModel? accessToken = new();
 
-        var user = await _unitOfWork.UserRepository.FindByIdentityWithRolesAsync(username, cancellationToken);
+        // Find user from database.
+        var user = await _context.Users.AsNoTracking()
+            .Where(u => u.Username == username)
+            .FirstOrDefaultAsync(cancellationToken);
+
         if (user is null)
             return (accessToken, SignInStatus.NotFound);
 
@@ -55,9 +55,8 @@ public class IdentityService : IIdentityService
     public async Task<(UserEntity? user, SignInStatus status)> SignInValidateAsync(string username, string password,
         CancellationToken cancellationToken)
     {
-
         var user = await _context.Users
-            .Where(u => (u.Username == username || u.Email == username))
+            .Where(u => (u.Username == username))
             .FirstOrDefaultAsync(cancellationToken);
 
         // Is user account exist?
@@ -69,43 +68,49 @@ public class IdentityService : IIdentityService
             return (user, SignInStatus.WrongPassowrd);
 
         // Account is ban.
-        if (user.IsBanned)
-            return (user, SignInStatus.Banned);
+        //if (user.IsBanned)
+        //    return (user, SignInStatus.Banned);
 
         return (user, SignInStatus.Succeeded);
 
     }
+
     #endregion
 
     #region Sign-Up
+
     public async Task<SignupStatus> SignUpAsync(UserEntity newUser,
         CancellationToken cancellationToken)
     {
-        // Check user is exist?
-        UserEntity? user = await _context.Users
-            .Where(u => u.Username == newUser.Username || u.Email == newUser.Email)
-            .FirstOrDefaultAsync(cancellationToken);
+        // The username already been taken??
+        bool isTakenUsername = await _context.Users
+            .AnyAsync(u => u.Username == newUser.Username, cancellationToken);
 
-        if (user is not null)
+        if (isTakenUsername)
             return SignupStatus.AlreadyExist;
 
         // Create new account.
         await _context.Users.AddAsync(newUser);
-        if (await SaveChangeAsync(cancellationToken))
-            return SignupStatus.Succeded;
 
-        return SignupStatus.Failed;
+        // Save changes
+        var saveResult = await _context.SaveChangeAsync(cancellationToken);
+        if (saveResult.IsSuccess == false)
+            return SignupStatus.Failed;
+
+        return SignupStatus.Succeded;
     }
+
     #endregion
 
     #region Privates
+
     private async Task<AccessTokenViewModel?> GetUserAccessToken(UserEntity user, CancellationToken cancellationToken)
     {
         AccessTokenViewModel accessToken = new();
         try
         {
             #region Token
-            var getUserClaimsWithRoles = await user.GetClaims();
+            var getUserClaimsWithRoles = await user.GetClaimsAsync();
             DateTime tokenExpiresAt = DateTime.Now.AddMinutes(5);
 #if DEBUG
             // In debug mode token life is longer.
@@ -118,7 +123,7 @@ public class IdentityService : IIdentityService
             #endregion
 
             #region Refresh Token
-            var getUserClaims = await user.GetIdAsClaim();
+            var getUserClaims = await user.GetIdAsClaimAsync();
             DateTime refreshTokenExpiresAt = DateTime.Now.AddDays(3);
 #if DEBUG
             // In debug mode token life is longer.
@@ -138,7 +143,5 @@ public class IdentityService : IIdentityService
         return accessToken;
     }
 
-    private async Task<bool> SaveChangeAsync(CancellationToken cancellationToken) =>
-        Convert.ToBoolean(await _context.SaveChangesAsync(cancellationToken));
     #endregion
 }

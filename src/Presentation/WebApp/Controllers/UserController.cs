@@ -5,7 +5,7 @@ using System.Security.Claims;
 using TheBloodyInn.Application.Common.Commands.Users.Authentication.SignIn;
 using TheBloodyInn.Application.Common.Commands.Users.Authentication.Signup;
 using TheBloodyInn.Application.Common.Enums.User;
-using TheBloodyInn.Domain.Entities.Identity;
+using TheBloodyInn.Domain.Entities.Identities;
 using TheBloodyInn.WebApp.Models.User;
 
 namespace TheBloodyInn.WebApp.Controllers;
@@ -54,7 +54,7 @@ public class UserController : Controller
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Email)
+                new Claim(ClaimTypes.Name, user.Username)
             };
             #region Roles
             //foreach (var userRole in user.UserRoles)

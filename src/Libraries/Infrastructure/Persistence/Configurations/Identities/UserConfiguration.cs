@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TheBloodyInn.Domain.Entities.Identity;
+using TheBloodyInn.Domain.Entities.Identities;
 using TheBloodyInn.Infrastructure.Common.Consts;
 
 namespace TheBloodyInn.Infrastructure.Persistence.Configurations.Identities;
@@ -8,25 +8,29 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
 {
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
-        builder.ToTable("Users", TableSchema.Identity);
+        builder.ToTable("Users", TableSchema.Auth);
 
         // Id
         builder.HasKey(u => u.Id); // primary key
-        builder.Property(u => u.Id).HasColumnType(DataTypes.guid)
+        builder.Property(u => u.Id)
+            .HasColumnType(DataTypes.guid)
             .ValueGeneratedNever();
 
         // Username
-        builder.Property(a => a.Username).HasColumnType(DataTypes.nvarchar50);
-        
+        builder.Property(a => a.Username)
+            .HasColumnType(DataTypes.nvarchar50);
+
         // Name
-        builder.Property(a => a.Name).HasColumnType(DataTypes.nvarchar50).IsRequired(false);
+        builder.Property(a => a.Nickname)
+            .HasColumnType(DataTypes.nvarchar50)
+            .IsRequired(false);
 
         // Email
-        builder.Property(a => a.Email).HasColumnType(DataTypes.nvarchar50);
-        builder.HasIndex(b => b.Email).IsUnique();
+        //builder.Property(a => a.Email).HasColumnType(DataTypes.nvarchar50);
+        //builder.HasIndex(b => b.Email).IsUnique();
 
         // IsEmailConfirmed
-        builder.Property(a => a.IsEmailConfirmed).HasColumnType(DataTypes.boolean);
+        //builder.Property(a => a.IsEmailConfirmed).HasColumnType(DataTypes.boolean);
 
         // Password
         builder.OwnsOne(u => u.PasswordHash, ph =>
@@ -38,7 +42,7 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
         });
 
         // IsBanned
-        builder.Property(a => a.IsBanned).HasColumnType(DataTypes.boolean);
+        //builder.Property(a => a.IsBanned).HasColumnType(DataTypes.boolean);
 
         // RegisteredAt
         builder.Property(u => u.RegisteredAt).HasColumnType(DataTypes.datetime2);

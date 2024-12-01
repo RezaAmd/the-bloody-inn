@@ -2,8 +2,8 @@
 
 public enum InnState
 {
-    Pending,
-    FirstRound,
-    SecondRound,
+    Preparing,
+    WaitForInnkeepers,
+    Open,
     Closed
 }

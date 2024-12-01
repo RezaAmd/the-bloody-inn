@@ -3,6 +3,6 @@
 public class TableSchema
 {
     public const string Default = "dbo";
-    public const string Identity = "identity";
-    public const string Inn = "Inn";
+    public const string Auth = "Auth";
+    public const string Game = "Game";
 }

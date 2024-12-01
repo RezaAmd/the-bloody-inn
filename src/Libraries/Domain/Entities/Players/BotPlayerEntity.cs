@@ -1,6 +1,6 @@
 ﻿namespace TheBloodyInn.Domain.Entities.Players
 {
-    public class BotEntity : BaseEntity
+    public class BotPlayerEntity : BaseEntity
     {
         public required string Name { get; set; }
 

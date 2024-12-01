@@ -1,8 +1,7 @@
 ﻿namespace TheBloodyInn.Domain.Enum.Inns;
 
-public enum RoomKeyColor
+public enum InnkeeperColor
 {
-    White,
     Blue,
     Red,
     Green,

@@ -19,7 +19,6 @@ public class EntityRepository<TEntity> : IRepository<TEntity> where TEntity : Ba
 
     #endregion
 
-
     #region Properties
 
     /// <summary>

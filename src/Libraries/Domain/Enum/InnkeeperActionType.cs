@@ -4,8 +4,8 @@ public enum InnkeeperActionType
 {
     None,
     Bribe,
-    Build,
-    Kill,
-    Bury,
-    Pass
+    BuildAnnex,
+    KillGuest,
+    BuryBody,
+    PassTurn
 }

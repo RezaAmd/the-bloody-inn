@@ -4,3 +4,5 @@ global using TheBloodyInn.Application.Common.Models.DTOs.Settings;
 global using TheBloodyInn.Domain.Common;
 global using TheBloodyInn.Application.Common.Extensions;
 global using FluentValidation;
+global using Microsoft.EntityFrameworkCore;
+global using TheBloodyInn.Application.Common.Models;

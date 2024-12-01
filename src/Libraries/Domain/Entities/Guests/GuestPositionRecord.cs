@@ -1,4 +1,4 @@
-﻿using TheBloodyInn.Domain.Entities.Inns.InnAggregate;
+﻿using TheBloodyInn.Domain.Entities.Inns;
 using TheBloodyInn.Domain.Enum.Guests;
 
 namespace TheBloodyInn.Domain.Entities.Guests;
@@ -19,6 +19,6 @@ public class GuestPositionRecord : BaseEntity
     //public virtual Guest Guest { get; set; }
 
     public Guid? RoomId { get; set; }
-    public virtual InnRoom? Room { get; set; }
+    public virtual InnRoomEntity? Room { get; set; }
     #endregion
 }
