@@ -1,4 +1,6 @@
-﻿namespace TheBloodyInn.Infrastructure;
+﻿using TheBloodyInn.Application.Common.Interfaces;
+
+namespace TheBloodyInn.Infrastructure;
 
 public class EntityRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
 {

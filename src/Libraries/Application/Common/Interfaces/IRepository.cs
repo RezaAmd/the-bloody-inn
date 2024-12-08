@@ -1,6 +1,6 @@
 ﻿using TheBloodyInn.Domain.Entities;
 
-namespace TheBloodyInn.Infrastructure;
+namespace TheBloodyInn.Application.Common.Interfaces;
 
 public interface IRepository<TEntity> where TEntity : BaseEntity
 {
