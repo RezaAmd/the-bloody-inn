@@ -1,13 +1,12 @@
-﻿using TheBloodyInn.Domain.Common.Defaults.Guests;
-using TheBloodyInn.Domain.Entities.Guests;
+﻿using TheBloodyInn.Domain.Entities.Guests;
 
 namespace TheBloodyInn.Application.Services.Cards;
 
 public class CardService : ICardService
 {
-    public List<GuestEntity> GetAllGuestPatterns()
+    public List<GuestCardEntity> GetAllGuestPatterns()
     {
-        List<GuestEntity> guestList = new();
+        List<GuestCardEntity> guestList = new();
 
         #region Artisans
 

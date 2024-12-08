@@ -1,15 +1,16 @@
-﻿using TheBloodyInn.Domain.Enum.Cards;
+﻿using TheBloodyInn.Domain.Entities.Inns;
+using TheBloodyInn.Domain.Enum.Cards;
 using TheBloodyInn.Domain.Enum.Guests;
 
 namespace TheBloodyInn.Domain.Entities.Guests;
 
-public class GuestEntity : BaseEntity
+public class GuestCardEntity : BaseEntity
 {
     #region Ctor's
 
-    GuestEntity() { }
+    GuestCardEntity() { }
 
-    public GuestEntity(string systemName, GuestCategory category, RankType rank = RankType.Zero,
+    public GuestCardEntity(string systemName, GuestCategory category, RankType rank = RankType.Zero,
         AmountOfMoneyInPocket moneyInPocket = AmountOfMoneyInPocket.Eight, BuildItemType buildItem = BuildItemType.None)
     {
         SystemName = systemName;
@@ -33,6 +34,9 @@ public class GuestEntity : BaseEntity
     #endregion
 
     #region Relations
+
+    public Guid InnId { get; set; }
+    public virtual InnEntity? Inn { get; set; }
 
     #endregion
 }

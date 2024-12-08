@@ -1,4 +1,5 @@
-﻿using TheBloodyInn.Domain.Entities.Innkeepers;
+﻿using TheBloodyInn.Domain.Entities.Guests;
+using TheBloodyInn.Domain.Entities.Innkeepers;
 
 namespace TheBloodyInn.Domain.Entities.Inns;
 
@@ -13,7 +14,7 @@ public class InnEntity : BaseEntity
 
     public Guid CreatorId { get; set; }
     public virtual InnkeeperEntity? Creator { get; private set; }
-
+    public List<GuestCardEntity> IncomingGuests { get; set; }
     public virtual ICollection<InnRoomEntity>? Rooms { get; private set; } = new List<InnRoomEntity>();
 
     #endregion

@@ -4,5 +4,5 @@ namespace TheBloodyInn.Application.Services.Cards;
 
 public interface ICardService
 {
-    List<GuestEntity> GetAllGuestPatterns();
+    List<GuestCardEntity> GetAllGuestPatterns();
 }

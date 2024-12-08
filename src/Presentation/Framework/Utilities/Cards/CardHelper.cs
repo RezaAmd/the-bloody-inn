@@ -1,4 +1,4 @@
-﻿using TheBloodyInn.Domain.Common.Defaults.Guests;
+﻿using TheBloodyInn.Domain.Entities.Guests;
 using TheBloodyInn.Domain.Enum.Cards;
 using TheBloodyInn.Domain.Enum.Guests;
 
